@@ -2,13 +2,15 @@ import React from 'react';
 import styled from 'styled-components';
 import Filtro from './Components/Filtro/Filtro';
 import Carrinho from './Components/Carrinho/Carrinho';
-import Produtos from './Components/Produtos/Produtos';
+ import Produtos from './Components/Produtos/Produtos';
 import proptypes from 'prop-types';
+import wallpaper02 from './Components/imgBrinquedos/wallpaper02.jpg'
 import { isReturnStatement } from '@babel/types';
 
 const MainDiv = styled.div`
 display: flex;
 max-width: 100%;
+background-image: url(${wallpaper02});
 
 `
 const ProdutosDiv = styled.div`
@@ -68,30 +70,123 @@ const ProdutosLoja = [
     nomeProduto: 'Rick e Morty',
     valorProduto: 280,
     imagemProduto: require('./Components/imgBrinquedos/08.jpg'),
-  },
+  },]
 
-]
 
-function App(props) {
 
-  return(
-    <MainDiv>
-      <Filtro produtosLoja={props.ProdutosLoja}/>
-      <ProdutosDiv>
-      {ProdutosLoja.map(produto => {
-        return <Produtos nome={produto.nomeProduto} valor={produto.valorProduto} imagemProduto={produto.imagemProduto} 
-        />
-      })}
-      </ProdutosDiv>
-      <Carrinho>
+class App extends React.Component{
+        constructor(props){
+          super(props);
+          this.state = {
+            inputValorMinimo: 0,
+            inputValorMaximo: Infinity,
+            carrinhoCompras: props.valorProduto,
+            carrinhoCompras: [],
+            buscarCompras: '',
 
-      </Carrinho>
+
+          }
+      
+      }
+
+
+      controleMinimo = (event) => {
+        this.setState({
+            inputValorMinimo: event.target.value,
+        })
+    }
+
+    controleMaximo = (event) => {
+        this.setState({
+            inputValorMaximo: event.target.value,
+        })
+    }
+
+    controleBusca = (event) => {
+        this.setState({
+            buscarCompras: event.target.value,
+        })
+    }
+
+
+
+      atualizarFiltro = () => {
+        this.setState({
+          
+        })
+      }
+
+   
+      
+
+      colocarCarrinho = (produtos) => {
+        const itensComprados = [...this.state.carrinhoCompras]
+        const produtosIndex = this.state.carrinhoCompras.findIndex((item) => item.produtos.id === produtos.id)
     
+        if (produtosIndex > -1) {
+            itensComprados[produtosIndex].quantity += 1
+        } else {
+            itensComprados.push({ produto: produtos, quantity: 1 })
+        }
+    
+        this.setState({
+          arrayProdutos: itensComprados,
+          
+        })
+        
+        console.log(itensComprados)
+        
+      }
 
 
+    render(){
 
-    </MainDiv>
-  );
-}
+    //   filtrar = () => {
+    //     const listaFiltrada = props.lista.filter((valor) => {
+    //        if (valor.valorProduto >= this.state.inputValorMinimo && valor.valorProduto <= this.state.inputValorMaximo){
+    //             return true
+    //     }
+    //        else{
+    //            return false
+    //     }
+    // })}
+
+    let funcaoMinimo = ProdutosLoja.filter((produtos => {
+      if(produtos.valorProduto > this.state.inputValorMinimo){
+        return produtos.valorProduto;
+        
+      }
+  
+
+    }))
+
+     let filtroBuscar = ProdutosLoja.filter((produtos) => {
+        return produtos.nomeProduto.toLowerCase().includes(this.state.buscarCompras.toLowerCase())
+
+     })
+      
+     console.log(this.state.buscarCompras)
+
+      return(
+        
+      
+      <MainDiv>
+          <Filtro carrinhoCompras={ProdutosLoja} controleMinimo={this.controleMinimo} controleMaximo={this.controleMaximo} controleBusca={this.controleBusca} valueControleMinimo={this.state.inputValorMinimo} valueControleMaximo={this.state.inputValorMaximo} valueBuscarProdutos={this.state.inputBuscarProduto} filtroBuscar={filtroBuscar} funcaoMinimo={funcaoMinimo}/>
+        <ProdutosDiv>
+          {filtroBuscar.map(produto => {
+            return <Produtos nome={produto.nomeProduto} valor={produto.valorProduto} imagemProduto={produto.imagemProduto} 
+            />
+          })}
+        </ProdutosDiv>
+        <Carrinho>
+          
+        </Carrinho>
+        
+      </MainDiv>
+      
+    )};
+  
+  }
+
 
 export default App;

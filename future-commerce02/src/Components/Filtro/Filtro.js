@@ -6,6 +6,10 @@ const FiltroDiv = styled.div`
     width: 20%;
     height: 100vh;
     margin: 5px;
+    background-color: rgba(233, 48, 66, 0.5);
+    color: white;
+
+
 `
 const ContainerDiv = styled.div`
     display:flex;
@@ -19,33 +23,28 @@ class Filtro extends React.Component{
     constructor(props){
     super(props);
     this.state = {
-            inputValorMinimo: '',
-            inputValorMaximo:'',
-            inputBuscarProduto: '',
-            produtosLoja: props.valorProduto,
-            
+                      
         }
-
 
     }
 
 
-
+   
 
     render(){
+
         return(
             <FiltroDiv>
                 <ContainerDiv>
-                    <h2>Filtros:</h2>
+                    <h2>Filtros</h2>
                     <label>Valor Mínimo:</label>
-                    <input value={this.state.inputValorMinimo} onChange="" type="number"></input>
+                    <input value={this.props.valueControleMinimo} onChange={this.props.controleMinimo} type="number"></input>
                     <label>Valor Máximo:</label>
-                    <input value={this.state.inputValorMaximo} onChange="" type="number"></input>
+                    <input value={this.props.valueControleMaximo} onChange={this.props.controleMaximo} type="number"></input>
                     <label>Buscar Produto</label>
-                    <input   value={this.state.inputBuscarProduto}></input>
+                    <input   value={this.props.valueBuscarProduto} onChange={this.props.controleBusca}></input>
                 </ContainerDiv>
-            </FiltroDiv>
-            
+            </FiltroDiv> 
         )
     }
 }
